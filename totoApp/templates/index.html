@@ -1,0 +1,43 @@
+{% load static %}
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Totos</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Liste des Totos</h1>
+        <a href="{% url 'add_toto' %}" class="btn">Ajouter un Nouveau Toto</a>
+        <ul class="toto-list">
+            {% for toto in totos %}
+            <li>
+                <div class="toto-item">
+                    {% if toto.photo %}
+                        <img src="{{ toto.url }}" alt="{{ toto.nom }}" width="100">
+                    {% else %}
+                        <img src="{% static 'default-image.jpg' %}" alt="Image par défaut" width="100">
+                    {% endif %}
+                    
+                    <div class="toto-details">
+                        <p><strong>Nom:</strong> {{ toto.nom }}</p>
+                        <p><strong>Prénom:</strong> {{ toto.prenom }}</p>
+                        <p><strong>Date de Naissance:</strong> {{ toto.date_naissance }}</p>
+                    </div>
+                    
+                    <div class="toto-actions">
+                        <a href="{% url 'edit_toto' toto.id %}" class="btn">Modifier</a>
+                        <form action="{% url 'delete_toto' toto.id %}" method="POST" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
